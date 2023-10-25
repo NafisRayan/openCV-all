@@ -3,7 +3,7 @@ import mediapipe as mp
 
 mp_hands = mp.solutions.hands
 
-def draw_cubes_on_fingertips():
+def draw_Squires_on_fingertips():
     cap = cv2.VideoCapture(0)
     with mp_hands.Hands(
         min_detection_confidence=0.5, min_tracking_confidence=0.5, max_num_hands=15
@@ -31,17 +31,17 @@ def draw_cubes_on_fingertips():
                         cv2.rectangle(image, (x - 10, y - 10), (x + 10, y + 10), (0, 255, 0), 2)
                         cv2.putText(
                             image,
-                            "Cube",
+                            "Squire",
                             (x - 20, y - 20),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.5,
                             (0, 255, 0),
                             2,
                         )
-            cv2.imshow("Cubes on Fingertips", image)
+            cv2.imshow("Squires on Fingertips", image)
             if cv2.waitKey(10) == ord("q"):
                 break
     cap.release()
     cv2.destroyAllWindows()
 
-draw_cubes_on_fingertips()
+draw_Squires_on_fingertips()
