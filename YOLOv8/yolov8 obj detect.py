@@ -106,9 +106,17 @@ while True:
             cls = box.cls[0]
             name = classNames[int(cls)]
 
-            cvzone.putTextRect(img, f'{name} 'f'{conf}', (max(0,x1), max(35,y1)), scale = 0.5)
+            cvzone.putTextRect(img, f'{name} 'f'{conf}', (max(0,x1), max(35,y1)), scale = 2)
 
 
 
     cv2.imshow("Image", img)
-    cv2.waitKey(1)
+    
+    # Check for key press 'q' to stop the loop
+    key = cv2.waitKey(1)
+    if key == ord('q'):
+        break
+
+# Release the video capture and close all OpenCV windows
+cap.release()
+cv2.destroyAllWindows()
