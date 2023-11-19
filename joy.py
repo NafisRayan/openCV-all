@@ -20,6 +20,13 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
               "teddy bear", "hair drier", "toothbrush"]
 
+# Initialize status bar parameters
+status_bar_height = 50
+status_bar_color = (0, 0, 0)
+health = 100
+ammo = 30
+
+
 while True:
     success, img = cap.read()
 
@@ -44,31 +51,51 @@ while True:
             text = f"{name}"
 
             text_size = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 1, 1)[0]
-            text_center = (max(0, x1) + text_size[0] // 2, max(35, y1) - text_size[1] // 2)
+            text_center = ((max(0, x1) + text_size[0] // 2), (max(35, y1) - text_size[1] // 2))
 
             font = cv2.FONT_HERSHEY_SIMPLEX
             fontScale = 1
             textThickness=2 
             textColor=(0, 0, 0)
             bgColor=(255, 255, 255)
-            pad_x, pad_y = 15, 15
+            pad_x, pad_y = 10, 10
             bgOpacity=0.5
             (t_w, t_h) = text_size
 
 
             overlay = img.copy()  # copying the image
-            # Draw 
-            cv2.circle(overlay, object_center, 5, (0, 0, 0), -1)  
+           
+           # Assuming 'overlay' already contains elements such as circles, lines, etc.
 
-            cv2.line(overlay, object_center, text_center, (0, 0, 0), 1) 
+            # Define the desired horizontal and vertical distances between rectangles
+            horizontal_distance = 0  # Adjust this value for horizontal space
+            vertical_distance = 43# Adjust this value for vertical space
 
-            cv2.rectangle(overlay, (x - pad_x, y + pad_y), (x + t_w + pad_x, y - t_h - pad_y), bgColor, -1)  # draw rectangle
+            # Define coordinates for the three rectangles with spacing
+            rectB = ((x - pad_x), (max(35, y1) - text_size[1] - 2 * pad_y),
+                    (x + text_size[0] + pad_x), (y + pad_y + text_size[1] + 2 * pad_y))
+            rectC = ((x - pad_x - horizontal_distance), (y + pad_y + text_size[1] + pad_y + vertical_distance)-33,
+                    (x + text_size[0] + pad_x + horizontal_distance), (y + pad_y + text_size[1] + 3 * pad_y + vertical_distance))
 
-            cv2.putText(overlay, text, textPos, font, fontScale, textColor, textThickness)  # draw in text
+            # Draw rectangles A, B, and C on the overlay
+            
+            cv2.rectangle(overlay, (rectB[0], rectB[1]), (rectB[2], rectB[3]), (0, 255, 0), 2)  # Green color for B
+            cv2.rectangle(overlay, (rectC[0], rectC[1]), (rectC[2], rectC[3]), (0, 255, 0), 2)  # Blue color for C
 
-            cv2.rectangle(overlay, (max(0, x1) - pad_x, max(35, y1) - text_size[1] - pad_y),
-                          (max(0, x1) + text_size[0] + pad_x, max(35, y1) + pad_y), (0, 25, 30), 2,
-                          cv2.LINE_AA)
+
+            # Put text inside rectangle B
+            cv2.putText(overlay, text, textPos, font, fontScale, textColor, textThickness)
+
+
+
+            # Draw status bar with carved underline
+            # cv2.rectangle(overlay, (0, 0), (img.shape[1], status_bar_height), status_bar_color, -1)
+            # cv2.line(overlay, (0, status_bar_height - 1), (img.shape[1], status_bar_height - 1), (255, 255, 255), 1)
+            # cv2.line(overlay, (0, status_bar_height - 2), (img.shape[1], status_bar_height - 2), (255, 255, 255), 1)
+            cv2.line(overlay, (0, status_bar_height - 3), (img.shape[1], status_bar_height - 3), (255, 255, 255), 1)
+
+            # cv2.putText(overlay, f"Health: {health}  Ammo: {ammo}", (10, 30), font, 1, (255, 255, 255), 2)
+
 
             img = cv2.addWeighted(overlay, bgOpacity, img, 1 - bgOpacity, 0)  # overlaying on the image.
 

@@ -6,7 +6,9 @@ image_path = 'img.jpg'  # Replace with the path to your image file
 
 img = cv2.imread(image_path)
 
-model = YOLO('yolov8n.pt')
+model = YOLO("yolov8x-seg.pt")
+
+results = model.predict(source=0, show = True)
 
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat", "traffic light",
               "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
@@ -18,7 +20,6 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
               "teddy bear", "hair drier", "toothbrush"]
 
-results = model(img)
 
 for r in results:
     boxes = r.boxes
